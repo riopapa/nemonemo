@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     public static Context mContext;
     static File mPackagePath, mOutPath;
 
-
     public static class Nemo {
         public String fName;
         public Bitmap bitmap;
