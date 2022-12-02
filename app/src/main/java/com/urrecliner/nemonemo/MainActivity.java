@@ -8,14 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-import android.view.Display;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     public static void setNemo(int pos, Nemo nemo) {
         nemos.set(pos, nemo);
     }
-    static int sizeX;
+    static NemoAdaptor nemoAdaptor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,36 +61,29 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        View v = getLayoutInflater().inflate(R.layout.activity_main,null);
-        // create an instance of the snackbar
-        setContentView(v);
+        setContentView(R.layout.activity_main);
         askPermission();
         mActivity = this; mContext = getApplicationContext();
         mPackagePath = new File(Environment.getExternalStorageDirectory(), "nemonemo");
         mOutPath = new File(Environment.getExternalStorageDirectory(), "download");
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        sizeX = size.x;
 
         File[] fullFileList = mPackagePath.listFiles((dir, name) ->
                 (name.endsWith(".jpg")));
 
-        Arrays.sort(fullFileList, new Comparator<File>() {
-            @Override
-            public int compare(File f1, File f2) {
-                return f1.compareTo(f2);
-            }
-        });
+        Arrays.sort(fullFileList, Comparator.naturalOrder());
         nemos = new ArrayList<>();
         for (File f: fullFileList) {
             String fn = f.getName();
             fn = fn.substring(0, fn.length()-4);
             nemos.add(new Nemo(fn, null));
         }
-        NemoAdaptor nemoAdaptor = new NemoAdaptor();
+        nemoAdaptor = new NemoAdaptor();
         RecyclerView view = findViewById(R.id.nemoView);
         view.setAdapter(nemoAdaptor);
+    }
+    public static void delNemo(int pos) {
+        nemos.remove(pos);
+        nemoAdaptor.notifyItemRemoved(pos);
     }
 
     // ↓ ↓ ↓ P E R M I S S I O N    RELATED /////// ↓ ↓ ↓ ↓

@@ -13,7 +13,6 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -89,16 +88,22 @@ public class EditActivity extends AppCompatActivity {
         LinearLayout boxLayout = findViewById(R.id.edNemo);
         boxLayout.addView(linearLayout);
         TextView tvName = findViewById(R.id.edFName);
-        tvName.setText(fName);
+        String s = fName+"\n"+xSz+"x"+ySz;
+        tvName.setText(s);
         TextView tvMake = findViewById(R.id.edGo);
-        tvMake.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new MakePDF().create(bitmap, new File(mOutPath,"nemo_"+fName+"Qz.PDF"), false);
-                new MakePDF().create(bitmap, new File(mOutPath,"nemo_"+fName+"Ans.PDF"), true);
-                finish();
-                Toast.makeText(mContext,fName+" PDF Created", Toast.LENGTH_SHORT).show();
-            }
+        tvMake.setOnClickListener(view -> {
+            new MakePDF().create(bitmap, new File(mOutPath,"nemo_"+fName+"Qz.PDF"), false);
+            new MakePDF().create(bitmap, new File(mOutPath,"nemo_"+fName+"Ans.PDF"), true);
+            finish();
+            Toast.makeText(mContext,fName+" PDF Created", Toast.LENGTH_SHORT).show();
+        });
+        TextView tvDel = findViewById(R.id.edDel);
+        tvDel.setOnClickListener(view -> {
+            Toast.makeText(mContext,"DELETE "+fName+" Image", Toast.LENGTH_SHORT).show();
+            File file = new File(mPackagePath, fName+".jpg");
+            file.delete();
+            MainActivity.delNemo(pos);
+            finish();
         });
     }
 }

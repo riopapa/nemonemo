@@ -12,9 +12,11 @@ import android.graphics.Paint;
 
 public class MakeNemo {
 
+    final int X_DOT_COUNT = 16; // or 20 for more difficult
+
     Bitmap build(String fName) {
         Bitmap bitmapOrg = BitmapFactory.decodeFile(mPackagePath+"/"+fName+".jpg");
-        int xSize = bitmapOrg.getWidth() / 4; int ySize = bitmapOrg.getHeight() / 4;
+        int xSize = bitmapOrg.getWidth() / 8; int ySize = bitmapOrg.getHeight() / 8;
         Bitmap bitmapSmall = Bitmap.createScaledBitmap(bitmapOrg, xSize, ySize, false);
         Bitmap bitmapGray = toGrayscale(bitmapSmall);
 
@@ -30,14 +32,18 @@ public class MakeNemo {
             }
 //            Log.w("line "+y, str);
         }
-        Bitmap bitmapCrop = cropBitmap(bitmapGray);
-        bitmapGray = Bitmap.createScaledBitmap(bitmapCrop, 160, 160, false);
-//        bitmapGray = Bitmap.createScaledBitmap(bitmapGray, 80, 80, false);
-//        bitmapGray = Bitmap.createScaledBitmap(bitmapGray, 40, 40, false);
-        return Bitmap.createScaledBitmap(bitmapGray, 20, 20, false);
+
+        Bitmap cropped = autoCrop(bitmapGray);
+        xSize = cropped.getWidth(); ySize = cropped.getHeight();    // xy ratio might be changed
+        int xNew = X_DOT_COUNT*3;
+        int yNew = xNew * ySize / xSize;
+        bitmapGray = Bitmap.createScaledBitmap(cropped, xNew, yNew, false);
+        xNew = X_DOT_COUNT;
+        yNew = xNew * ySize / xSize;
+        return Bitmap.createScaledBitmap(bitmapGray, xNew, yNew, false);
     }
 
-    Bitmap cropBitmap (Bitmap iMap) {
+    Bitmap autoCrop(Bitmap iMap) {
         int xSize = iMap.getWidth(); int ySize = iMap.getHeight();
         int xStart = -1, yStart = -1, xFinish = -1, yFinish = -1;
         // check topline
@@ -84,7 +90,7 @@ public class MakeNemo {
             if (xFinish != -1)
                 break;
         }
-        return Bitmap.createBitmap(iMap, xStart, yStart, xFinish-xStart, yFinish-yStart);
+        return Bitmap.createBitmap(iMap, xStart, yStart, xFinish-xStart+1, yFinish-yStart+1);
     }
 
     Bitmap toGrayscale(Bitmap srcImage) {
