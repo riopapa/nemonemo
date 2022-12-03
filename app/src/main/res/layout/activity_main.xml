@@ -7,6 +7,48 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <LinearLayout
+        android:id="@+id/optionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:text="xDotSize"
+            />
+        <EditText
+            android:id="@+id/et_xsize"
+            android:layout_width="36sp"
+            android:layout_height="wrap_content"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:text="boxSize"
+            />
+        <EditText
+            android:id="@+id/et_box"
+            android:layout_width="24sp"
+            android:layout_height="wrap_content"
+            />
+        <TextView
+            android:id="@+id/show_list"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:text="Show"
+            />
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/nemoView"
         android:layout_width="match_parent"
@@ -14,6 +56,7 @@
         android:layout_margin="2dp"
         app:layoutManager="GridLayoutManager"
         app:spanCount="2"
+        app:layout_constraintTop_toBottomOf="@id/optionLayout"
     />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static Activity mActivity;
     public static Context mContext;
+    public static int xCount = 20, xBox = 5;
     static File mPackagePath, mOutPath;
 
     public static class Nemo {
@@ -76,9 +80,24 @@ public class MainActivity extends AppCompatActivity {
             fn = fn.substring(0, fn.length()-4);
             nemos.add(new Nemo(fn, null));
         }
-        nemoAdaptor = new NemoAdaptor();
-        RecyclerView view = findViewById(R.id.nemoView);
-        view.setAdapter(nemoAdaptor);
+
+        EditText etSize = findViewById(R.id.et_xsize);
+        etSize.setText(""+xCount);
+        EditText etBox = findViewById(R.id.et_box);
+        etBox.setText(""+xBox);
+
+        RecyclerView listView = findViewById(R.id.nemoView);
+        listView.setVisibility(View.GONE);
+        TextView tvShow = findViewById(R.id.show_list);
+        tvShow.setOnClickListener(view -> {
+            xCount = Integer.parseInt(etSize.getText().toString());
+            xBox = Integer.parseInt(etBox.getText().toString());
+            nemoAdaptor = new NemoAdaptor();
+            listView.setAdapter(nemoAdaptor);
+            tvShow.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+        });
+
     }
     public static void delNemo(int pos) {
         nemos.remove(pos);

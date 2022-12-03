@@ -12,8 +12,6 @@ import android.graphics.Paint;
 
 public class MakeNemo {
 
-    final int X_DOT_COUNT = 16; // or 20 for more difficult
-
     Bitmap build(String fName) {
         Bitmap bitmapOrg = BitmapFactory.decodeFile(mPackagePath+"/"+fName+".jpg");
         int xSize = bitmapOrg.getWidth() / 8; int ySize = bitmapOrg.getHeight() / 8;
@@ -35,10 +33,10 @@ public class MakeNemo {
 
         Bitmap cropped = autoCrop(bitmapGray);
         xSize = cropped.getWidth(); ySize = cropped.getHeight();    // xy ratio might be changed
-        int xNew = X_DOT_COUNT*3;
+        int xNew = MainActivity.xCount*3;
         int yNew = xNew * ySize / xSize;
         bitmapGray = Bitmap.createScaledBitmap(cropped, xNew, yNew, false);
-        xNew = X_DOT_COUNT;
+        xNew = MainActivity.xCount;
         yNew = xNew * ySize / xSize;
         return Bitmap.createScaledBitmap(bitmapGray, xNew, yNew, false);
     }
